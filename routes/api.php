@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
 
@@ -44,10 +45,13 @@ Route::middleware('jwt')->group(function(){
         Route::post('block/{id}', [UserController::class, 'userBlock']);
     });
 
-    Route::prefix('client')->group(function(){
-        Route::get('search', [ClientController::class, 'search']);
-        Route::post('create', [ClientController::class, 'create']);
-        Route::patch('{id}', [ClientController::class, 'update']);
-        Route::delete('{id}', [ClientController::class, 'delete']);
-    });
+
+});
+
+Route::prefix('order')->group(function(){
+    Route::get('search', [OrderController::class, 'search']);
+    Route::post('import', [OrderController::class, 'import']);
+    Route::post('create', [OrderController::class, 'create']);
+    Route::patch('{id}', [OrderController::class, 'update']);
+    Route::delete('{id}', [OrderController::class, 'delete']);
 });
