@@ -13,7 +13,7 @@ class UserSeed extends Seeder
      */
     public function run(): void
     {
-        
+
         User::firstOrCreate([
             'email' => 'admin@admin',
         ],
@@ -25,8 +25,8 @@ class UserSeed extends Seeder
             'whatsapp' => '83991236636',
             'cpf_cnpj' => '13754674412',
             'birth_date' => '2001-12-18',
-            'company_position_id' => 1,
-            'sector_id' => null,
+            // 'company_position_id' => 1,
+            // 'sector_id' => null,
             'is_active' => true,
         ]);
     }

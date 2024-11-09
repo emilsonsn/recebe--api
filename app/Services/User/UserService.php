@@ -35,7 +35,7 @@ class UserService
             $perPage = $request->input('take', 10);
             $search_term = $request->search_term;
 
-            $users = User::with('companyPosition', 'sector');
+            $users = User::query();
 
             if(isset($search_term)){
                 $users->where('name', 'LIKE', "%{$search_term}%")
@@ -48,20 +48,20 @@ class UserService
         } catch (Exception $error) {
             return ['status' => false, 'error' => $error->getMessage(), 'statusCode' => 400];
         }
-    }  
+    }
 
     public function getUser()
     {
         try {
             $user = auth()->user();
-    
+
             if ($user) {
                 // Cast para o tipo correto
                 $user = $user instanceof \App\Models\User ? $user : \App\Models\User::find($user->id);
-    
+
                 return ['status' => true, 'data' => $user];
             }
-    
+
             return ['status' => false, 'error' => 'Usuário não autenticado', 'statusCode' => 401];
         } catch (Exception $error) {
             return ['status' => false, 'error' => $error->getMessage(), 'statusCode' => 400];
@@ -101,39 +101,39 @@ class UserService
                 'whatsapp' => 'nullable|string',
                 'cpf_cnpj' => 'nullable|string',
                 'birth_date' => 'nullable|date',
-                'company_position_id' => 'nullable|integer',
-                'sector_id' => 'nullable|integer',
+                // 'company_position_id' => 'nullable|integer',
+                // 'sector_id' => 'nullable|integer',
                 'is_active' => 'nullable|boolean|default:true',
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // validação para a foto
             ];
-    
+
             $password = str_shuffle(Str::upper(Str::random(1)) . rand(0, 9) . Str::random(1, '?!@#$%^&*') . Str::random(5));
-    
+
             $requestData = $request->all();
             $requestData['password'] = Hash::make($password);
-    
+
             $validator = Validator::make($requestData, $rules);
-    
+
             if ($validator->fails()) {
                 return ['status' => false, 'error' => $validator->errors(), 'statusCode' => 400];
             }
-    
+
             if ($request->hasFile('photo')) {
                 $path = $request->file('photo')->store('photos', 'public');
                 $fullPath = asset('storage/' . $path);
                 $requestData['photo'] = $fullPath;
             }
-    
+
             $user = User::create($requestData);
-    
+
             Mail::to($user->email)->send(new WelcomeMail($user->name, $user->email, $password));
-    
+
             return ['status' => true, 'data' => $user];
         } catch (Exception $error) {
             return ['status' => false, 'error' => $error->getMessage(), 'statusCode' => 400];
         }
     }
-    
+
 
     public function update($request, $user_id)
     {
@@ -147,8 +147,8 @@ class UserService
                 'whatsapp' => 'nullable|string',
                 'cpf_cnpj' => 'nullable|string',
                 'birth_date' => 'nullable|date',
-                'company_position_id' => 'nullable|integer',
-                'sector_id' => 'nullable|integer',
+                // 'company_position_id' => 'nullable|integer',
+                // 'sector_id' => 'nullable|integer',
                 'is_active' => 'nullable|boolean|default:true',
                 'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ];
