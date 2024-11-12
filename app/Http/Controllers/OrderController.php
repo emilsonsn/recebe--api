@@ -15,7 +15,7 @@ class OrderController extends Controller
 
     public function search(Request $request) {
         $result = $this->orderService->search($request);
-        return $this->response($result);
+        return $result;
     }
 
     public function import(Request $request) {
