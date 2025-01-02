@@ -61,7 +61,7 @@ class UserController extends Controller
     public function delete($id){
         $result = $this->userService->delete($id);
 
-        if($result['status']) $result['message'] = "Ação realizada com sucesso";
+        if($result['status']) $result['message'] = "Usuário deletado com sucesso";
         return $this->response($result);
     }
 
