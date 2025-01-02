@@ -93,6 +93,8 @@ class UserService
     public function create($request)
     {
         try {
+            $request['photo'] = $request['photo'] === 'null' ? null : $request['photo'];
+
             $rules = [
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
@@ -115,7 +117,11 @@ class UserService
             $validator = Validator::make($requestData, $rules);
 
             if ($validator->fails()) {
-                return ['status' => false, 'error' => $validator->errors(), 'statusCode' => 400];
+                throw new Exception($validator->errors(), 400);
+            }
+
+            if(User::where('cpf_cnpj', $request->cpf_cnpj)->count()){
+                throw new Exception("Já existe usuário com esse CPF cadastrado", 400);
             }
 
             if ($request->hasFile('photo')) {
@@ -188,6 +194,22 @@ class UserService
             $user->save();
 
             return ['status' => true, 'data' => $user];
+        } catch (Exception $error) {
+            return ['status' => false, 'error' => $error->getMessage(), 'statusCode' => 400];
+        }
+    }
+
+    public function delete($user_id)
+    {
+        try {
+            $user = User::find($user_id);
+
+            if (!$user) throw new Exception('Usuário não encontrado');
+
+            $userName = $user->name;
+            $user->delete();
+
+            return ['status' => true, 'data' => $userName];
         } catch (Exception $error) {
             return ['status' => false, 'error' => $error->getMessage(), 'statusCode' => 400];
         }

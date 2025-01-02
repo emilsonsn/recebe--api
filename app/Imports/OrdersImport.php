@@ -15,6 +15,10 @@ class OrdersImport implements ToModel, WithHeadingRow
     {
         $this->count++;
 
+        foreach($row as $key => $value){
+            $row[$key] = str_replace(['="', '"'],['', ''], $row[$key]);
+        }
+
         return new Order([
             'type' => $row['tipo'] ?? null,
             'order_id' => $row['id_pedido'] ?? null,

@@ -47,7 +47,7 @@ class OrderService
     {
         try {
             $validator = Validator::make($request->all(), [
-                'file' => 'required|file|mimes:xlsx,xls,ods',
+                'file' => 'required|file|mimes:xlsx,xls,ods,csv',
             ]);
     
             if ($validator->fails()) {
@@ -94,6 +94,7 @@ class OrderService
                 'other_debits' => 'nullable|numeric',
                 'net_result' => 'nullable|numeric',
                 'sync_date' => 'nullable|date',
+                'status' => 'nullable|boolean',
                 'user_id' => 'nullable|integer|exists:users,id',
             ];
 
@@ -142,6 +143,7 @@ class OrderService
                 'other_debits' => 'nullable|numeric',
                 'net_result' => 'nullable|numeric',
                 'sync_date' => 'nullable|date',
+                'status' => 'nullable|boolean',
                 'user_id' => 'nullable|integer|exists:users,id',
             ];
 

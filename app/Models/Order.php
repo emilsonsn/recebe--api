@@ -42,6 +42,7 @@ class Order extends Model
         'other_debits',
         'net_result',
         'sync_date',
+        'status',
         'user_id',
     ];
 
